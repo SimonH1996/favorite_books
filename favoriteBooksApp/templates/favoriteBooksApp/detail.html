@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <a href="/favBooksApp/">Home</a>
+    <h1>I am Detail View</h1>
+    {{request.session.user}}
+
+    <form action="/favBooksApp/update/{{book.id}}" method="post">
+        {%csrf_token%}
+        <input value="{{book.title}}" name="title">
+        <br />
+        <label>Created_BY</label>
+        {{book.created_by}}
+        <br />
+        <label>Added On</label>
+        {{book.created_at}}
+        <br />
+        <label>Updated at</label>
+        {{book.updated_at}}
+        <br />
+        <label>Description</label>
+        <br />
+        <textarea name="description">{{book.description}}</textarea>
+        <br />
+        <input type="submit" value="update" />
+    </form>
+    <a href="/favBooksApp/delete/{{book.id}}">Delete</a>
+
+    <h2>User who liked this book:</h2>
+    {%for user in book.user_who_liked.all %}
+    <div>
+        {{user.email}}
+    </div>
+    {%endfor%}
+</body>
+
+</html>

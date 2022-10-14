@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <style>
+        #form_box {
+            display: flex;
+            justify-content: center;
+        }
+
+        #form_box>.userApp_form {
+            display: flex;
+            flex-direction: column;
+            border: solid black 1px;
+            border-radius: 10%;
+            width: 200px;
+            padding: 50px;
+        }
+
+        #form_box>.userApp_form>.form_element {
+            padding-top: 4px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #form_box>.userApp_form>#form_submit {
+            justify-content: center;
+            align-items: center;
+            max-width: 40%;
+        }
+    </style>
+</head>
+
+<body>
+    {%if request.session.user %}
+    <a href="/favBooksApp/">Homepage</a>
+    {%endif%}
+    <div id="form_box">
+        <form class="userApp_form" action="/userApp/register/" method="post">
+            {%csrf_token%}
+            <h1>Registration</h1>
+            <div class="form_element">
+                <label>First Name</label>
+                <input name="first_name" type="text">
+            </div>
+
+            <div class="form_element">
+                <label>Last Name</label>
+                <input name="last_name" type="text">
+            </div>
+
+            <div class="form_element">
+                <label>Email</label>
+                <input name="email" type="email">
+            </div>
+
+            <div class="form_element">
+                <label>Password</label>
+                <input name="password" type="password">
+            </div>
+
+            <div class="form_element">
+                <label>Confirm Password</label>
+                <input name="confirm_password" type="password">
+            </div>
+            <input class="form_element" id="form_submit" type="submit" value="Register">
+        </form>
+
+        <form class="userApp_form" action="/userApp/login/" method="post">
+            {%csrf_token%}
+            <h1>Login</h1>
+            <div class="form_element">
+                <label>Email</label>
+                <input name="email" type="email">
+            </div>
+
+            <div class="form_element">
+                <label>Password</label>
+                <input name="password" type="password">
+            </div>
+            <input class="form_element" id="form_submit" type="submit" value="Login">
+        </form>
+    </div>
+    <form action="/userApp/logout/" method="post">
+        {%csrf_token%}
+    <input value ="logout" type="submit">
+    </form>
+    <h3>Logged In User:</h3>
+    <label>{{loggedInUser}}</label>
+    <h3>Users:</h3>
+    {%for user in users%}
+    <div>
+        <label>{{user.email}}</label>
+        <label>{{user.password}}</label>
+        <form action="/userApp/delete/{{user.email}}/" method="post">
+            {%csrf_token%}
+            <input type="submit" value="delete">
+        </form>
+    </div>
+    {%endfor%}
+</body>
+
+</html>

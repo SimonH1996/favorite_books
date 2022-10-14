@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favortie Books</title>
+    <style>
+        nav {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Favortie Books</h1>
+    <nav>
+        <label>Hello,{{loggedInUser}}</label>
+        <a href="/userApp/logout">logout</a>
+    </nav>
+    <hr />
+
+    <form action="/favBooksApp/createBook/" method="post">
+        {%csrf_token%}
+        <h2>Add Favortie Book</h2>
+
+        <div>
+            <label>Title</label>
+            <input type="text" name="title">
+        </div>
+
+        <div>
+            <label>Description</label>
+            <input type="text" name="description">
+        </div>
+
+        <input type="submit" value="Add">
+    </form>
+    <h2>All Books</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created_by</th>
+        </tr>
+        {%for book in books%}
+        <tr>
+            <td>{{book.id}}</td>
+            <td>
+                {%if book.created_by == request.session.user%}
+                <a href="/favBooksApp/detail/{{book.id}}">{{book.title}}</a>
+                {%else%}
+                <a href="/favBooksApp/detailNotLogin/{{book.id}}">{{book.title}}</a>
+                {%endif%}
+                
+            </td>
+            <td>{{book.description}}</td>
+            <td>{{book.created_by}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+
+</html>

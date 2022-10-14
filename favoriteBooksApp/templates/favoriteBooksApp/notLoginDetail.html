@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="/favBooksApp/">Home</a>
+    <h1>I am Detail View</h1>
+    {{request.session.user}}
+
+    <label>{{book.title}}</label>
+    <br />
+    <label>Created_BY</label>
+    {{book.created_by}}
+    <br />
+    <label>Added On</label>
+    {{book.created_at}}
+    <br />
+    <label>Updated at</label>
+    {{book.updated_at}}
+    <br />
+    <label>Description</label>
+    <br />
+    <label>{{book.description}}</label>
+    <br />
+    {%if not book.user_who_liked.all|length > 0%}
+        <a href="/favBooksApp/favorBook/{{book.id}}">favor book</a>
+    {%else%}
+
+        {%for user in book.user_who_liked.all %}
+            {%if user.email == request.session.email%}
+                <a href="/favBooksApp/favorBook/{{book.id}}">favor book</a>
+            {%endif%}
+        {%endfor%}
+    {%endif%}
+    
+    <h2>User who liked this book:</h2>
+    {%for user in book.user_who_liked.all %}
+    <div>
+        {{user.email}}
+    </div>
+    {%endfor%}
+
+
+
+</body>
+
+</html>
