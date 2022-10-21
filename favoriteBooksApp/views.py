@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import redirect, render
 from .models import Book
 from userApp.models import User
@@ -6,10 +7,17 @@ from userApp.models import User
 # or writing like a method to make it not changeable
 INDEX = 'favoriteBooksApp/index.html'
 
+def isUserInList(request,list):
+    for user in list:
+        if user.email == request.session['user']:
+            return True
+ 
+    return False
 
 def dashboard_view(request):
     context = {
-        'books':Book.objects.all()
+        'books':Book.objects.all(),
+        
     }
     return render(request,INDEX,context)
 
@@ -36,7 +44,6 @@ def detail_view(request,book_id):
 #                ....
 #                book.save()
     
-
 def update_book(request,book_id):
         Book.objects.filter(id=book_id).update(
             title=request.POST['title'],
@@ -50,11 +57,14 @@ def delete_book(request,book_id):
 
 # this function renders the detail page when the user isn´t logged in
 def notLogin_View(request,book_id):
+
+    userIn = isUserInList(request,Book.objects.get(id=book_id).user_who_liked.all())
     users_who_liked = Book.objects.get(id = book_id).user_who_liked.all()
 
     context = {
         'book': Book.objects.get(id = book_id),
-        'user_who_liked': users_who_liked
+        'user_who_liked': users_who_liked,
+        'userIn': userIn
     }
     return render(request,"favoriteBooksApp/notLoginDetail.html",context)
 
@@ -62,6 +72,7 @@ def notLogin_View(request,book_id):
 def favorBook(request,book_id):
     Book.objects.get(id = book_id).user_who_liked.add(User.objects.get(email = request.session['user']))
     return redirect("/favBooksApp/")
+
 
 
 

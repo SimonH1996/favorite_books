@@ -16,7 +16,7 @@
 <body>
     <h1>Favortie Books</h1>
     <nav>
-        <label>Hello,{{loggedInUser}}</label>
+        <label>Hello,{{request.session.user}}</label>
         <a href="/userApp/logout">logout</a>
     </nav>
     <hr />
@@ -54,7 +54,6 @@
                 {%else%}
                 <a href="/favBooksApp/detailNotLogin/{{book.id}}">{{book.title}}</a>
                 {%endif%}
-                
             </td>
             <td>{{book.description}}</td>
             <td>{{book.created_by}}</td>
